@@ -3,6 +3,8 @@ import java.awt.*;
 public class BST {
     private BST Tree;
     private Nodo root;
+    public static int nodi=0;
+
 
     public BST(int[] A) {for (int i = 0; i < A.length; i++) insert(A[i]);}
     public BST(int key) {root = new Nodo(key);}
@@ -20,7 +22,9 @@ public class BST {
 
     private Nodo min_(Nodo x) {return x == null || x.getS() == null ? x : min_(x.getS());}
     public Nodo min() {return min_(root);}
-
+    public static double getAltezza(){
+        return Math.log10(nodi+1)/Math.log10(2)-1;
+    }
     private Nodo find(int key, String id) {
         Nodo x = search(key);
 
@@ -46,6 +50,7 @@ public class BST {
     public Nodo previous(int key) {return find(key, "previous");}
 
     public void insert(Nodo x) {
+        nodi++;
         Nodo y = null, z = root;
         boolean STOP = false;
 
@@ -65,6 +70,8 @@ public class BST {
 
             if (y == null) {
                 root = x;
+                root.x=35;
+                root.y=10;
 
             } else {
                 x.setPadre(y);
@@ -132,7 +139,9 @@ public class BST {
         } else System.out.println("Impossibile eliminare null");
     }
 
-    public void delete(int key) {delete(search(key));}
+    public void delete(int key) {
+        nodi--;
+        delete(search(key));}
 
     public void printNodo(Nodo x, Graphics2D g) {
         if (x != null) {

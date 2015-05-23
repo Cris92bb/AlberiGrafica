@@ -5,7 +5,8 @@ import java.awt.geom.Ellipse2D;
  * Created by cris on 25/03/15.
  */
 public class Nodo {
-    int x =0;
+    public int x=0;
+    public int y=0;
     private int key;
     private Nodo padre=null;
     private Nodo d=null;
@@ -23,7 +24,6 @@ public class Nodo {
     }
 
     public Nodo getPadre(){
-        isLeft();
         return padre;
 
     }
@@ -51,33 +51,40 @@ public class Nodo {
     public boolean isLeaf(){
         return d==null && s == null ? true:false;
     }
-    public int altezza(){
 
-        if(padre==null)
+    public int segno(){
+        if(padre!=null && (padre.getS()==null || padre.getD()==null)){
             return 0;
-        else
-            return padre.altezza()+1;
-    }
-    public void isLeft(){
-
-        if(padre != null && padre.getS()!= this)
-            x=padre.x+100/altezza()+40/altezza();
-        else if(padre==null){
-            x=20;
-        }else {
-            x=padre.x-100/altezza()-40/altezza();
+        }else if(padre != null && padre.getS()==this){
+             return -1;
+        }else{
+            return 1;
         }
 
-
+    }
+    public int getAltezza(){
+        if(padre==null){
+            return 1;
+        }else{
+            return 1+padre.getAltezza();
+        }
     }
 
 
 
     public void drawNodo(Graphics2D g){
-        g.draw(new Ellipse2D.Double(x,altezza()*40+50,20,20));
+        int tempx=0, tempy=0;
+        if(padre!=null){
+            tempx=padre.x;
+            tempy=padre.y;
+            int SHIFTX=(int)((BST.getAltezza()*20/getAltezza()+5)/getAltezza()*BST.getAltezza());
+            x=padre.x+SHIFTX*segno();
+            y=padre.y+60;
+        }
+        g.draw(new Ellipse2D.Double(x,y,20,20));
         if(padre!= null)
-        g.drawLine(padre.x+10,padre.altezza()*40+50,x+10,altezza()*40+50);
-        g.drawString("" + key,x+3, altezza()*40+65);
+        g.drawLine(tempx+10,tempy+20,x+10,y);
+        g.drawString("" + key,x+6,y+13);
     }
 
 
